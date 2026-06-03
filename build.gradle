@@ -10,7 +10,7 @@ description = 'my-daily-memo-app'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(26)
     }
 }
 
