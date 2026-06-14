@@ -28,7 +28,7 @@ public class main {
         userService.register(user.getUsername(), user.getPassword());
         return "redirect:/login";
     }
-    @RequestMapping("/home")
+    @GetMapping("/home")
     public  String home(){
         return "home";
     }
