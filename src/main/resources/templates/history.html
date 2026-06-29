@@ -1,72 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <meta charset="UTF-8">
-    <title></title>
-
+    <title>過去の日記</title>
 </head>
 <body>
-<!--過去の日記を見るための画面
- 日付とタイトルを表示してクリックしたら本文と写真が見れるようなUI-->
-<h1 th:text="|過去の日記(${today.getYear()}年${today.getMonthValue()}月分)|"></h1>
-<form method="get" 　th:action="@{/history}">
-    <select name="year">
-        <option th:each="m : ${years}" th:value="${m}" th:text="${m}+'年'" th:selected="${m==selectedYear}"></option>
-    </select>
-    <select name="month">
-        <option th:each="m : ${months}" th:value="${m}" th:text="${m}+'月'" th:selected="${m == selectedMonth}"></option>
-    </select>
-    <button type="submit">表示</button>
-</form>
-<button id="favorite">お気に入りのみ表示</button>
+<nav class="nav">
+    <a th:href="@{/home}" class="nav-title">📔 My Daily Memo</a>
+    <div class="nav-links">
+        <a th:href="@{/home}" class="btn btn-secondary">ホーム</a>
+    </div>
+</nav>
 
-<button type="button" onclick="location.href='/home'">ホーム</button>
-<div class="diary-list">
-    <a th:each="diary : ${diaries}"
-       th:href="@{/diary/{id}(id=${diary.id})}"
-       class="diary-card">
-        <p class="diary-date" th:text="${#temporals.format(diary.createdAt, 'yyyy年MM月dd日')}"></p>
-        <p class="diary-title" th:text="${diary.title}"></p>
-        <!-- お気に入り機能の星マークの追加
-        クリックされたら塗りつぶしバージョンにする-->
-        <i class="fa-regular fa-star star-btn"></i>
-    </a>
+<div class="container">
+    <h1>過去の日記</h1>
 
+    <div class="filter-bar">
+        <form method="get" th:action="@{/history}" style="display:flex; gap:8px; align-items:center;">
+            <select name="year">
+                <option th:each="y : ${years}" th:value="${y}" th:text="|${y}年|" th:selected="${y == selectedYear}"></option>
+            </select>
+            <select name="month">
+                <option th:each="m : ${months}" th:value="${m}" th:text="|${m}月|" th:selected="${m == selectedMonth}"></option>
+            </select>
+            <button type="submit" class="btn btn-primary">表示</button>
+        </form>
+        <button id="favorite" class="btn btn-secondary">お気に入りのみ表示</button>
+    </div>
+
+    <div class="diary-list">
+        <a th:each="diary : ${diaries}"
+           th:href="@{/diary/{id}(id=${diary.id})}"
+           class="diary-card">
+            <div>
+                <p class="diary-date" th:text="${#temporals.format(diary.createdAt, 'yyyy年MM月dd日')}"></p>
+                <p class="diary-title" th:text="${diary.title}"></p>
+            </div>
+            <i class="fa-regular fa-star star-btn"></i>
+        </a>
+    </div>
 </div>
-<script >
+
+<script>
     document.querySelectorAll(".star-btn").forEach(star => {
-       const diaryId = star.closest("a").getAttribute("href");
+        const diaryId = star.closest("a").getAttribute("href");
 
-       if(localStorage.getItem("star-" + diaryId) === "true"){
-           star.classList.remove("fa-regular");
-           star.classList.add("fa-solid");
-       }
-       star.addEventListener("click",(event) => {
-           event.stopPropagation();
-           event.preventDefault();
-           star.classList.toggle("fa-regular");
-           star.classList.toggle("fa-solid");
-           const isFavorite = star.classList.contains("fa-solid");
-           localStorage.setItem("star-" + diaryId,isFavorite);
-       })
+        if (localStorage.getItem("star-" + diaryId) === "true") {
+            star.classList.remove("fa-regular");
+            star.classList.add("fa-solid");
+        }
+
+        star.addEventListener("click", (event) => {
+            event.stopPropagation();
+            event.preventDefault();
+            star.classList.toggle("fa-regular");
+            star.classList.toggle("fa-solid");
+            const isFavorite = star.classList.contains("fa-solid");
+            localStorage.setItem("star-" + diaryId, isFavorite);
+        });
     });
-    document.getElementById("favorite").addEventListener("click",() => {
-        const btn = document.getElementById("favorite");
-        const showOnlyFavorite = btn.textContent ==="お気に入りのみ表示";
 
+    const btn = document.getElementById("favorite");
+    btn.addEventListener("click", () => {
+        const showOnlyFavorite = btn.textContent === "お気に入りのみ表示";
         btn.textContent = showOnlyFavorite ? "すべて表示" : "お気に入りのみ表示";
 
         document.querySelectorAll(".diary-card").forEach(card => {
             const diaryId = card.getAttribute("href");
             const isFavorite = localStorage.getItem("star-" + diaryId) === "true";
-
-            if (showOnlyFavorite && !isFavorite) {
-                card.style.display = "none";
-            }else {
-                card.style.display = "block";
-            }
+            card.style.display = (showOnlyFavorite && !isFavorite) ? "none" : "flex";
         });
     });
 </script>

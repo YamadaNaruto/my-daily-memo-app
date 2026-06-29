@@ -1,15 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="${diary.title}"></title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<h1 th:text="${#temporals.format(diary.createdAt, 'yyyy年MM月dd日')}"></h1>
-<p th:text="|タイトル:${diary.title}|"></p>
-<p th:text="${diary.content}"></p>
-<img th:if="${diary.imagePath != null}" th:src="@{${'/'+diary.imagePath}}" alt="その日の写真" width="300" height="200">
-<button type="button" onclick="location.href='/history'">戻る</button>
-<button type="button" onclick="location.href='/home'">ホーム</button>
+<nav class="nav">
+    <a th:href="@{/home}" class="nav-title">📔 My Daily Memo</a>
+    <div class="nav-links">
+        <a th:href="@{/history}" class="btn btn-secondary">一覧に戻る</a>
+        <a th:href="@{/home}" class="btn btn-primary">ホーム</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="detail-card">
+        <p class="detail-date" th:text="${#temporals.format(diary.createdAt, 'yyyy年MM月dd日')}"></p>
+        <h1 class="detail-title" th:text="${diary.title}"></h1>
+        <p class="detail-content" th:text="${diary.content}"></p>
+        <img th:if="${diary.imagePath != null}"
+             th:src="@{${'/'+diary.imagePath}}"
+             alt="その日の写真"
+             class="detail-image">
+    </div>
+</div>
 </body>
 </html>

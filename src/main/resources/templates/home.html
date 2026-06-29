@@ -1,67 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>ホーム</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<div class="content">
-<h1>日記</h1>
-<!-- 今日の日記をまだ書いていなかったら今日の日記を書くためのフォーム
-    今日の日記を書いていたらその文章を表示しておいて、編集可能にする
-    過去の日記を見るボタンは常に表示-->
-<h2 th:text="|今日の日記(${today})|"></h2>
-<div th:if="${todayDiary != null}">
-    <p th:text="${todayDiary.content}"></p>
-    <img th:if="${todayDiary.imagePath != null}" th:src="@{${'/'+todayDiary.imagePath}}" alt="その日の写真" width="300" height="200">
-</div>
-    <div th:if="${todayDiary == null}"    >
-        <form th:action="@{/upload}" method="post" enctype="multipart/form-data">
-        タイトル:<input name = "title" id="title" value="タイトル"><br>
-        <textarea name="content" id="content" style="width: 400px; height: 200px;"></textarea><br>
-    <!--　写真を追加できるようにしたい--
-    spiring bootに送信→DBにサーバ上のパスを保存→dbから取得して表示-->
-        <label for="image">写真を追加する</label>
-        <input type="file" id="image" name="image">
-        <button type="button" id="saveBtn">一時保存</button>
-        <input type="submit" value="送信">
-        </form>
+<nav class="nav">
+    <span class="nav-title">📔 My Daily Memo</span>
+    <div class="nav-links">
+        <a th:href="@{/history}" class="btn btn-secondary">過去の日記</a>
+    </div>
+</nav>
+
+<div class="container">
+    <h1 th:text="|${today} の日記|"></h1>
+
+    <div th:if="${todayDiary != null}">
+        <div class="today-content" th:text="${todayDiary.content}"></div>
+        <img th:if="${todayDiary.imagePath != null}"
+             th:src="@{${'/'+todayDiary.imagePath}}"
+             alt="その日の写真"
+             class="detail-image">
+    </div>
+
+    <div th:if="${todayDiary == null}">
+        <div class="form-card">
+            <form th:action="@{/upload}" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="title">タイトル</label>
+                    <input type="text" name="title" id="title" placeholder="今日のタイトル">
+                </div>
+                <div class="form-group">
+                    <label for="content">本文</label>
+                    <textarea name="content" id="content" placeholder="今日はどんな一日でしたか？"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="image">写真を追加する</label>
+                    <input type="file" id="image" name="image">
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="saveBtn" class="btn btn-secondary">一時保存</button>
+                    <input type="submit" value="保存する" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+
 <script th:src="@{/js/push.js}"></script>
 <script>
     subscribePush();
-</script>
-<script>
 
-const content  = document.getElementById("content");
-const title = document.getElementById("title");
-// 要素が存在する時だけ実行
-if (content && title) {
-    const date = new Date();
-//保存済みデータを復元
-    prev_date = localStorage.getItem("date") || "";
-    if (date.toDateString() === prev_date) {
-        content.value = localStorage.getItem("content") || "";
-        title.value = localStorage.getItem("title") || "";
-    } else {
-        content.value = "";
-        title.value = "";
+    const content = document.getElementById("content");
+    const title = document.getElementById("title");
+
+    if (content && title) {
+        const date = new Date();
+        const prev_date = localStorage.getItem("date") || "";
+        if (date.toDateString() === prev_date) {
+            content.value = localStorage.getItem("content") || "";
+            title.value = localStorage.getItem("title") || "";
+        } else {
+            content.value = "";
+            title.value = "";
+        }
     }
-}
 
-
-<!-- 過去の日記を見るためにdbに保存するようにする-->
-const saveBtn = document.getElementById("saveBtn");
-if (saveBtn) {
-    document.getElementById("saveBtn").addEventListener("click", () => {
-        localStorage.setItem("content", content.value);
-        localStorage.setItem("title", title.value);
-        localStorage.setItem("date", date.toDateString());
-
-    });
-}
+    const saveBtn = document.getElementById("saveBtn");
+    if (saveBtn) {
+        saveBtn.addEventListener("click", () => {
+            const date = new Date();
+            localStorage.setItem("content", content.value);
+            localStorage.setItem("title", title.value);
+            localStorage.setItem("date", date.toDateString());
+        });
+    }
 </script>
-<a th:href="@{/history}">過去の日記を見る</a>
 </body>
 </html>

@@ -1,31 +1,258 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', sans-serif;
+    background: #f5f0e8;
+    color: #3a3a3a;
+    min-height: 100vh;
+}
+
+/* ナビゲーション */
+.nav {
+    background: #fff;
+    padding: 16px 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #c8956c;
+    text-decoration: none;
+}
+
+.nav-links {
+    display: flex;
+    gap: 12px;
+}
+
+/* コンテナ */
+.container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* ページタイトル */
+h1 {
+    font-size: 26px;
+    color: #c8956c;
+    margin-bottom: 24px;
+    border-bottom: 2px solid #e8d5c4;
+    padding-bottom: 12px;
+}
+
+h2 {
+    font-size: 20px;
+    color: #5a5a5a;
+    margin-bottom: 16px;
+}
+
+/* ボタン */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background 0.2s, transform 0.1s;
+    text-decoration: none;
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+.btn-primary {
+    background: #c8956c;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: #b07d58;
+}
+
+.btn-secondary {
+    background: #fff;
+    color: #c8956c;
+    border: 2px solid #c8956c;
+}
+
+.btn-secondary:hover {
+    background: #f5ece4;
+}
+
+.btn-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* フォーム */
+.form-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 6px;
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: inherit;
+    background: #fafafa;
+    transition: border-color 0.2s;
+}
+
+.form-group input[type="text"]:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #c8956c;
+    background: #fff;
+}
+
+.form-group textarea {
+    height: 200px;
+    resize: vertical;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* 日記カード一覧 */
 .diary-list {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    padding: 20px;
 }
+
 .diary-card {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     text-decoration: none;
-    color: black;
+    color: #3a3a3a;
     background: #fff;
-    border: 1px solid #ddd;
+    border: 1px solid #e8d5c4;
     border-radius: 12px;
     padding: 16px 20px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
     transition: transform 0.2s, box-shadow 0.2s;
 }
+
 .diary-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
 }
+
 .diary-date {
     font-size: 12px;
-    color: #888;
+    color: #aaa;
     margin-bottom: 4px;
 }
+
 .diary-title {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
-    margin: 0;
+}
+
+.star-btn {
+    font-size: 20px;
+    color: #f0c040;
+    padding: 4px 8px;
+    flex-shrink: 0;
+}
+
+/* 日記詳細 */
+.detail-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+.detail-date {
+    font-size: 13px;
+    color: #aaa;
+    margin-bottom: 8px;
+}
+
+.detail-title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #c8956c;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e8d5c4;
+}
+
+.detail-content {
+    font-size: 16px;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    margin-bottom: 24px;
+}
+
+.detail-image {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+}
+
+/* フィルターバー */
+.filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.filter-bar select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    background: #fff;
+    cursor: pointer;
+}
+
+/* 今日の日記表示エリア */
+.today-content {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    font-size: 16px;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    margin-bottom: 20px;
 }
