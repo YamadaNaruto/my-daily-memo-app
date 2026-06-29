@@ -27,6 +27,9 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/home",true)
                         .permitAll()
                 );
+                http.csrf(csrf -> csrf
+                    .ignoringRequestMatchers("/subscribe")
+        )  ;
 
 
         return http.build();

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1 th:text="${#temporals.format(diary.createdAt, 'yyyy年MM月dd日')}"></h1>
+<p th:text="|タイトル:${diary.title}|"></p>
+<p th:text="${diary.content}"></p>
+<img th:if="${diary.imagePath != null}" th:src="@{${'/'+diary.imagePath}}" alt="その日の写真" width="300" height="200">
+<button type="button" onclick="location.href='/history'">戻る</button>
+<button type="button" onclick="location.href='/home'">ホーム</button>
+</body>
+</html>
