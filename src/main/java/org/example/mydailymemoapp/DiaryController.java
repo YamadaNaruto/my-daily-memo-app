@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 import nl.martijndwars.webpush.PushService;
 
 import nl.martijndwars.webpush.Notification;
@@ -27,11 +26,16 @@ import java.util.concurrent.ExecutionException;
 
 @Controller
 @RequiredArgsConstructor
-public class main {
+public class DiaryController {
 
     private final DiaryService diaryService;
     private final UserService userService;
     private final PushSubscriptionRepository pushSubscriptionRepository;
+
+    @Value("${vapid.public.key}")
+    private String publicKey;
+    @Value("${vapid.private.key}")
+    private String privateKey;
 
 
     @GetMapping("/login")
@@ -104,10 +108,7 @@ public class main {
         return  "history";
 
     }
-    @Value("${vapid.public.key}")
-    private String publicKey;
-    @Value("${vapid.private.key}")
-    private String privateKey;
+
     @GetMapping("/diary/{id}")
     public String showDiary(@PathVariable Long id, Model model){
         Diary diary = diaryService.findById(id);
@@ -148,5 +149,10 @@ public class main {
             pushService.send(notification);
             System.out.println("通知送信完了: " + sub.getEndpoint());
         }
+    }
+    @GetMapping("/vapidPublicKey")
+    @ResponseBody
+    public String vapidPublicKey(){
+        return publicKey;
     }
 }

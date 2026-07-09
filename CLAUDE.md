@@ -32,7 +32,7 @@ docker compose up --build
 
 All Java lives in a single package: `src/main/java/org/example/mydailymemoapp/`.
 
-- **`main.java`** — the sole `@Controller`. Note the class is literally named `main` (lowercase). It handles every route: auth pages, `/home`, `/upload`, `/history`, `/diary/{id}`, and the push `/subscribe` endpoint. The `@Scheduled` daily-reminder job also lives here.
+- **`DiaryController.java`** — the sole `@Controller`. It handles every route: auth pages, `/home`, `/upload`, `/history`, `/diary/{id}`, and the push `/subscribe` endpoint. The `@Scheduled` daily-reminder job also lives here.
 - **Entities**: `Diary` (title, content, imagePath, `@CreationTimestamp createdAt`), `User` (unique username, bcrypt password), `PushSubscription` (endpoint + p256dh/auth keys).
 - **Services / Repositories**: `DiaryService`/`DiaryRepository`, `UserService`/`UserRepository`, `PushSubscriptionRepository`. Repositories are Spring Data JPA interfaces relying on derived query methods (e.g. `findFirstByCreatedAtBetween`, `findByCreatedAtBetweenOrderByCreatedAtDesc`).
 - **Config**: `SecurityConfig` (filter chain), `WebConfig` (static resource handler), `MyDailyMemoAppApplication` (entry point, `@EnableScheduling`).
@@ -50,7 +50,7 @@ All Java lives in a single package: `src/main/java/org/example/mydailymemoapp/`.
 
 - Client: `static/js/push.js` requests permission, registers `static/sw.js`, subscribes via the VAPID public key, and POSTs the subscription to `/subscribe`. `sw.js` renders incoming pushes.
 - Server: `/subscribe` (CSRF-exempt in `SecurityConfig`, `@ResponseBody`) dedupes by endpoint and persists the subscription.
-- A `@Scheduled(cron = "0 30 8 * * *")` job in `main.java` sends a reminder to every stored subscription each morning at 08:30 (server time), registering BouncyCastle at send time.
+- A `@Scheduled(cron = "0 30 8 * * *")` job in `DiaryController.java` sends a reminder to every stored subscription each morning at 08:30 (server time), registering BouncyCastle at send time.
 - VAPID keys are configured in `application.properties` (`vapid.public.key` / `vapid.private.key`) and the same public key is hardcoded in `push.js` — keep the two in sync if you rotate them.
 
 ### Security
